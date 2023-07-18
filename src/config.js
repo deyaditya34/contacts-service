@@ -1,16 +1,16 @@
 const MONGO_URI = "mongodb://127.0.0.1:27017";
 const DB_NAME = "contacts-service";
 
-const APP_PORT = 3000;
+const APP_PORT = 9000;
 const COLLECTION_NAMES = {
   CONTACTS: "contacts",
   USERS: "users",
 };
 
-const JWT_SECRET = "some-unknown-secret";
+const JWT_SECRET = "Bokahat@123";
 const AUTH_TOKEN_HEADER_FIELD = "token";
 
-const PASSWORD_SALT = "some-secret-password-salt-for-encryption";
+const PASSWORD_SALT = "Bokakhat@123";
 
 module.exports = {
   MONGO_URI,
