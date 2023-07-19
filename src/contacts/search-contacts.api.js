@@ -37,14 +37,14 @@ function validateParams(req, res, next) {
     parsedFilter.phone = filter.phone;
   }
 
-  if (filter.isFav) {
-    parsedFilter.isFav = filter.isFav;
+  if (filter.isFavorite) {
+    parsedFilter.isFavorite = filter.isFavorite;
   }
   
  
-  if (!parsedFilter.name && !parsedFilter.phone && !parsedFilter.isFav) {
+  if (!parsedFilter.name && !parsedFilter.phone && !parsedFilter.isFavorite) {
     throw createHttpError.BadRequest(
-      "Atleast 'name', 'phone' or 'id must be provided in filter"
+      "Atleast 'name', 'phone' or 'isFavorite' must be provided in filter"
     );
   }
 

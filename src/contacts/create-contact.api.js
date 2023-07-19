@@ -5,13 +5,13 @@ const userResolver = require("../middlewares/user-resolver");
 const { createContactForUser } = require("./contacts.service");
 
 async function controller(req, res) {
-  let { name, phone, isFav, user } = req.body;
+  let { name, phone, isFavorite, user } = req.body;
 
   if (!isFav) {
     isFav = "false";
   }
 
-  const result = await createContactForUser({ name, phone, isFav }, user);
+  const result = await createContactForUser({ name, phone, isFavorite }, user);
 
   res.json({
     success: result.acknowledged,
@@ -33,7 +33,7 @@ function validateParams(req, res, next) {
     );
   }
 
-  const { name, phone, isFav } = req.body;
+  const { name, phone, isFavorite } = req.body;
   if (name.length > 30) {
     throw httpError.BadRequest(`Name '${name}' is invalid`);
   }
@@ -43,13 +43,13 @@ function validateParams(req, res, next) {
     throw httpError.BadRequest(`Phone number '${phone}' is invalid`);
   }
 
-  if (isFav) {
-    if (typeof Reflect.get(req.body, "isFav") !== "string") {
-      throw httpError.BadRequest(`isFav request should be of string type`);
+  if (isFavorite) {
+    if (typeof Reflect.get(req.body, "isFavorite") !== "string") {
+      throw httpError.BadRequest(`isFavorite request should be of string type`);
     }
     if (isFav !== "true" && isFav !== "false") {
       throw httpError.BadRequest(
-        `Favorite status - '${isFav}' is invalid. It should either be true or false`
+        `Favorite status - '${isFavorite}' is invalid. It should either be true or false`
       );
     }
   }

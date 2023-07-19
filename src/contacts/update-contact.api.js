@@ -25,7 +25,7 @@ async function controller(req, res) {
 }
 
 function validateParams(req, res, next) {
-  const { name, phone, isFav } = req.body.update;
+  const { name, phone, isFavorite } = req.body.update;
   if (name) {
     if (typeof name !== "string") {
       throw httpError.BadRequest(`'${name}' field should be of string type`);
@@ -43,13 +43,13 @@ function validateParams(req, res, next) {
       throw httpError.BadRequest(`Phone number '${phone}' is invalid`);
     }
   }
-  if (isFav) {
-    if (typeof isFav !== "string") {
-      throw httpError.BadRequest(`'${isFav}' field should be of string type`);
+  if (isFavorite) {
+    if (typeof isFavorite !== "string") {
+      throw httpError.BadRequest(`'${isFavorite}' field should be of string type`);
     }
-    if (isFav !== "true" && isFav !== "false") {
+    if (isFavorite !== "true" && isFavorite !== "false") {
       throw httpError.BadRequest(
-        `Favorite status - '${isFav}' is invalid. It should either be true or false`
+        `Favorite status - '${isFavorite}' is invalid. It should either be true or false`
       );
     }
   }
@@ -66,13 +66,13 @@ function validateParams(req, res, next) {
     parsedUpdate.phone = updateContact.phone;
   }
 
-  if (updateContact.isFav) {
-    parsedUpdate.isFav = updateContact.isFav;
+  if (updateContact.isFavorite) {
+    parsedUpdate.isFavorite = updateContact.isFavorite;
   }
 
-  if (!parsedUpdate.name && !parsedUpdate.phone && !parsedUpdate.isFav) {
+  if (!parsedUpdate.name && !parsedUpdate.phone && !parsedUpdate.isFavorite) {
     throw createHttpError.BadRequest(
-      "Atleast 'name', 'phone' or 'isFav' must be provided in 'update'"
+      "Atleast 'name', 'phone' or 'isFavorite' must be provided in 'update'"
     );
   }
 
