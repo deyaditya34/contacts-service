@@ -27,7 +27,7 @@ async function login(username, password) {
   return token;
 }
 
-/**
+/** 
  * Registers a new user
  * @param {string} username the username
  * @param {string} password the password to use

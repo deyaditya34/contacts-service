@@ -16,7 +16,7 @@ function getAllContactsForUser(user) {
     .toArray();
 }
 
-function getAllContactForUser(id, user) {
+function getContactForUser(id, user) {
   return database
     .getCollection(COLLECTION_NAMES.CONTACTS)
     .findOne({_id: new ObjectId(id), "user.username": user.username})
@@ -65,6 +65,6 @@ module.exports = {
   searchContactsForUser,
   updateContactForUser,
   deleteContactForUser,
-  getAllContactForUser
+  getContactForUser
 };
 
