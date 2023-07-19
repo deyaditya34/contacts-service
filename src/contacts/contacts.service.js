@@ -7,6 +7,7 @@ const { ObjectId } = require("mongodb");
  * @param {{username: string}} user the authorized user
  * @returns {{name: string, phone: string}[]}
  */
+
 function getAllContactsForUser(user) {
   return database
     .getCollection(COLLECTION_NAMES.CONTACTS)
@@ -15,12 +16,20 @@ function getAllContactsForUser(user) {
     .toArray();
 }
 
+function getAllContactForUser(id, user) {
+  return database
+    .getCollection(COLLECTION_NAMES.CONTACTS)
+    .findOne({_id: new ObjectId(id), "user.username": user.username})
+}
+
 /**
  * Create a new contact against a user
  * @param {{name: string, phone: string}} contact the contact details to store
  * @param {{username: string}} user the authorized user
  * @returns {import("mongodb").InsertOneResult} the result of the Database store operation
  */
+
+
 function createContactForUser(contact, user) {
   return database.getCollection(COLLECTION_NAMES.CONTACTS).insertOne({
     ...contact,
@@ -44,20 +53,6 @@ function updateContactForUser(id, update, user) {
     );
 }
 
-function getAllFavoritesForUser(user) {
-  return database
-  .getCollection(COLLECTION_NAMES.CONTACTS)
-  .find({"isFav": "false", "user.username": user.username })
-  .toArray();
-}
-
-function getAllUnfavoritesForUser(user) {
-  return database
-  .getCollection(COLLECTION_NAMES.CONTACTS)
-  .find({"isFav": "false", "user.username": user.username})
-  .toArray();
-}
-
 function deleteContactForUser(id, user) {
   return database
   .getCollection(COLLECTION_NAMES.CONTACTS)
@@ -69,7 +64,7 @@ module.exports = {
   getAllContactsForUser,
   searchContactsForUser,
   updateContactForUser,
-  getAllFavoritesForUser,
-  getAllUnfavoritesForUser,
-  deleteContactForUser
+  deleteContactForUser,
+  getAllContactForUser
 };
+

@@ -24,7 +24,7 @@ async function controller(req, res) {
 }
 
 function validateParams(req, res, next) {
-  const errorTypedFields = ["name", "phone", "isFav"].filter(
+  const errorTypedFields = ["name", "phone"].filter(
     (field) => typeof Reflect.get(req.body, field) !== "string"
   );
   if (errorTypedFields.length > 0) {
@@ -44,6 +44,9 @@ function validateParams(req, res, next) {
   }
 
   if (isFav) {
+    if (typeof Reflect.get(req.body, "isFav") !== "string") {
+      throw httpError.BadRequest(`isFav request should be of string type`);
+    }
     if (isFav !== "true" && isFav !== "false") {
       throw httpError.BadRequest(
         `Favorite status - '${isFav}' is invalid. It should either be true or false`

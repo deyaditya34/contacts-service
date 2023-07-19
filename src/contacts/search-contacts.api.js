@@ -37,11 +37,12 @@ function validateParams(req, res, next) {
     parsedFilter.phone = filter.phone;
   }
 
-  // if (filter.id) {
-  //   parsedFilter.id = filter.id;
-  // }
+  if (filter.isFav) {
+    parsedFilter.isFav = filter.isFav;
+  }
+  
  
-  if (!parsedFilter.name && !parsedFilter.phone && !parsedFilter.id) {
+  if (!parsedFilter.name && !parsedFilter.phone && !parsedFilter.isFav) {
     throw createHttpError.BadRequest(
       "Atleast 'name', 'phone' or 'id must be provided in filter"
     );

@@ -25,31 +25,28 @@ async function controller(req, res) {
 }
 
 function validateParams(req, res, next) {
-  const reqTypeValidator = Object.keys(req.body.update);
-
-  const errorTypedFields = reqTypeValidator.filter(
-    (field) => typeof Reflect.get(req.body.update, field) !== "string"
-  );
-
-  if (errorTypedFields.length > 0) {
-    throw httpError.BadRequest(
-      `Fields '${errorTypedFields.join(",")}' should be of string type`
-    );
-  }
-
   const { name, phone, isFav } = req.body.update;
   if (name) {
+    if (typeof name !== "string") {
+      throw httpError.BadRequest(`'${name}' field should be of string type`);
+    }
     if (name.length > 30) {
       throw httpError.BadRequest(`Name '${name}' is invalid`);
     }
   }
   if (phone) {
+    if (typeof phone !== "string") {
+      throw httpError.BadRequest(`'${phone} field should be of string type`);
+    }
     const PHONE_NUM_WITHOUT_COUNTRY_CODE_REGEX = /^\d{10}$/;
     if (!PHONE_NUM_WITHOUT_COUNTRY_CODE_REGEX.test(phone)) {
       throw httpError.BadRequest(`Phone number '${phone}' is invalid`);
     }
   }
   if (isFav) {
+    if (typeof isFav !== "string") {
+      throw httpError.BadRequest(`'${isFav}' field should be of string type`);
+    }
     if (isFav !== "true" && isFav !== "false") {
       throw httpError.BadRequest(
         `Favorite status - '${isFav}' is invalid. It should either be true or false`
