@@ -1,4 +1,4 @@
-const createHttpError = require("http-errors");
+const httpError = require("http-errors");
 const buildApiHandler = require("../api-utils/build-api-handler.js");
 const userResolver = require("../middlewares/user-resolver.js");
 const { searchContactsForUser } = require("./contacts.service.js");
@@ -25,6 +25,32 @@ async function controller(req, res) {
 }
 
 function validateParams(req, res, next) {
+  const { name, phone, isFavorite } = req.body.filter;
+  if (name) {
+    if (typeof name !== "string") {
+      throw httpError.BadRequest(`'${name}' field should be of string type`);
+    }
+    if (name.length > 30) {
+      throw httpError.BadRequest(`Name '${name}' is invalid`);
+    }
+  }
+  if (phone) {
+    if (typeof phone !== "string") {
+      throw httpError.BadRequest(`'${phone} field should be of string type`);
+    }
+    const PHONE_NUM_WITHOUT_COUNTRY_CODE_REGEX = /^\d{10}$/;
+    if (!PHONE_NUM_WITHOUT_COUNTRY_CODE_REGEX.test(phone)) {
+      throw httpError.BadRequest(`Phone number '${phone}' is invalid`);
+    }
+  }
+  if (Reflect.has(req.body.filter, "isFavorite")) {
+    if (typeof isFavorite !== "boolean") {
+      throw httpError.BadRequest(
+        `'${isFavorite}' field should be of boolean type`
+      );
+    }
+  }
+
   const filter = req.body.filter;
 
   const parsedFilter = {};
@@ -37,13 +63,17 @@ function validateParams(req, res, next) {
     parsedFilter.phone = filter.phone;
   }
 
-  if (filter.isFavorite) {
+  if (Reflect.has(req.body.filter, "isFavorite")) {
     parsedFilter.isFavorite = filter.isFavorite;
   }
-  
- 
-  if (!parsedFilter.name && !parsedFilter.phone && !parsedFilter.isFavorite) {
-    throw createHttpError.BadRequest(
+
+  if (
+    !parsedFilter.name &&
+    !parsedFilter.phone &&
+    parsedFilter.isFavorite !== true &&
+    parsedFilter.isFavorite !== false
+  ) {
+    throw httpError.BadRequest(
       "Atleast 'name', 'phone' or 'isFavorite' must be provided in filter"
     );
   }

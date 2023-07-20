@@ -7,8 +7,8 @@ const { createContactForUser } = require("./contacts.service");
 async function controller(req, res) {
   let { name, phone, isFavorite, user } = req.body;
 
-  if (!isFav) {
-    isFav = "false";
+  if (!isFavorite) {
+    isFavorite = false;
   }
 
   const result = await createContactForUser({ name, phone, isFavorite }, user);
@@ -43,15 +43,15 @@ function validateParams(req, res, next) {
     throw httpError.BadRequest(`Phone number '${phone}' is invalid`);
   }
 
-  if (isFavorite) {
-    if (typeof Reflect.get(req.body, "isFavorite") !== "string") {
-      throw httpError.BadRequest(`isFavorite request should be of string type`);
+  if (Reflect.has(req.body, "isFavorite")) {
+    if (typeof Reflect.get(req.body, "isFavorite") !== "boolean") {
+      throw httpError.BadRequest(`isFavorite request should be of boolean type`);
     }
-    if (isFav !== "true" && isFav !== "false") {
-      throw httpError.BadRequest(
-        `Favorite status - '${isFavorite}' is invalid. It should either be true or false`
-      );
-    }
+    // if (isFavorite !== true && isFavorite !== false) {
+    //   throw httpError.BadRequest(
+    //     `Favorite status - '${isFavorite}' is invalid. It should either be true or false`
+    //   );
+    // }
   }
   next();
 }

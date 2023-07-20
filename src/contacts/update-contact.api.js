@@ -43,15 +43,17 @@ function validateParams(req, res, next) {
       throw httpError.BadRequest(`Phone number '${phone}' is invalid`);
     }
   }
-  if (isFavorite) {
-    if (typeof isFavorite !== "string") {
-      throw httpError.BadRequest(`'${isFavorite}' field should be of string type`);
-    }
-    if (isFavorite !== "true" && isFavorite !== "false") {
+  if (Reflect.has(req.body.update, "isFavorite")) {
+    if (typeof isFavorite !== "boolean") {
       throw httpError.BadRequest(
-        `Favorite status - '${isFavorite}' is invalid. It should either be true or false`
+        `'${isFavorite}' field should be of boolean type`
       );
     }
+    // if (isFavorite !== "true" && isFavorite !== "false") {
+    //   throw httpError.BadRequest(
+    //     `Favorite status - '${isFavorite}' is invalid. It should either be true or false`
+    //   );
+    // }
   }
 
   const updateContact = req.body.update;
@@ -66,11 +68,16 @@ function validateParams(req, res, next) {
     parsedUpdate.phone = updateContact.phone;
   }
 
-  if (updateContact.isFavorite) {
+  if (Reflect.has(req.body.update, "isFavorite")) {
     parsedUpdate.isFavorite = updateContact.isFavorite;
   }
 
-  if (!parsedUpdate.name && !parsedUpdate.phone && !parsedUpdate.isFavorite) {
+  if (
+    !parsedUpdate.name &&
+    !parsedUpdate.phone &&
+    parsedUpdate.isFavorite !== true &&
+    parsedUpdate.isFavorite !== false
+  ) {
     throw createHttpError.BadRequest(
       "Atleast 'name', 'phone' or 'isFavorite' must be provided in 'update'"
     );
